@@ -1,36 +1,48 @@
-// utils/cache.js
+class ClientCache {
+  constructor() {
+    this.cacheKeyPrefix = 'cache_';
+  }
 
-class Cache {
-    constructor() {
-      this.cache = {};
-      this.expiryTime = null;
-    }
-  
-    set(key, value, duration) {
+  set(key, value, duration) {
+    const now = new Date().getTime();
+    const expiryTime = now + duration;
+    const cacheObject = { value, expiryTime };
+    localStorage.setItem(this.cacheKeyPrefix + key, JSON.stringify(cacheObject));
+  }
+
+  get(key) {
+    const cacheItem = localStorage.getItem(this.cacheKeyPrefix + key);
+    if (cacheItem) {
+      const cacheObject = JSON.parse(cacheItem);
       const now = new Date().getTime();
-      const expiryTime = now + duration;
-      this.cache[key] = { value, expiryTime };
-    }
-  
-    get(key) {
-      const now = new Date().getTime();
-      const cachedItem = this.cache[key];
-      if (cachedItem && cachedItem.expiryTime > now) {
-        return cachedItem.value;
+      if (cacheObject.expiryTime > now) {
+        return cacheObject.value;
+      } else {
+        this.remove(key); // Remove expired cache
       }
-      return null;
     }
-  
-    clearExpired() {
-      const now = new Date().getTime();
-      for (const key in this.cache) {
-        if (this.cache[key].expiryTime <= now) {
-          delete this.cache[key];
+    return null;
+  }
+
+  remove(key) {
+    localStorage.removeItem(this.cacheKeyPrefix + key);
+  }
+
+  clearExpired() {
+    const now = new Date().getTime();
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith(this.cacheKeyPrefix)) {
+        const cacheItem = localStorage.getItem(key);
+        if (cacheItem) {
+          const cacheObject = JSON.parse(cacheItem);
+          if (cacheObject.expiryTime <= now) {
+            localStorage.removeItem(key);
+          }
         }
       }
-    }
+    });
   }
-  
-  const cache = new Cache();
-  module.exports = cache;
-  
+}
+
+const clientCache = new ClientCache();
+export default clientCache;
