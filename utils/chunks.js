@@ -1,8 +1,8 @@
-import { setHours, getHours, setMinutes, setSeconds, startOfDay, addDays } from 'date-fns';
-
-//const now = new Date('2024-07-23T17:00:00'); 
+import { setHours, getHours, startOfDay, addDays } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz'
 
 const now = new Date();
+
 
 export function getPreviousChunkTimes() {
 
@@ -26,8 +26,9 @@ export function getPreviousChunkTimes() {
   }
 
   // Ensure minutes and seconds are set to 0
-  chunkStartTime = setMinutes(setSeconds(chunkStartTime, 0), 0);
-  chunkEndTime = setMinutes(setSeconds(chunkEndTime, 0), 0);
+  chunkStartTime = formatInTimeZone(chunkStartTime, 'Europe/Stockholm', 'yyyy-MM-dd HH:mm:ssXXX');
+  chunkEndTime = formatInTimeZone(chunkEndTime, 'Europe/Stockholm', 'yyyy-MM-dd HH:mm:ssXXX');
+
 
   return { chunkStartTime, chunkEndTime };
 }
@@ -52,7 +53,7 @@ export function getCurrentChunkEndTime() {
         }
       
         // Ensure minutes and seconds are set to 0
-        nextChunk = setMinutes(setSeconds(nextChunk, 0), 0);
+         nextChunk = new Date(nextChunk);
       
         return { nextChunk };
       }

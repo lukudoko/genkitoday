@@ -4,6 +4,9 @@ import { isAfter, isBefore, parseISO } from 'date-fns';
 import analyseSentiment from './analyseSentiment';
 import shuffleArray from './shuffle';
 import { getPreviousChunkTimes } from '@/utils/chunks'; // Import the new function
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
+
+
 
 let parser = new Parser({
   customFields: {
@@ -31,6 +34,9 @@ const RSS_FEEDS = [
 async function fetchRSS() {
   let allItems = [];
   const { chunkStartTime, chunkEndTime } = getPreviousChunkTimes();
+  const tzone = "Europe/Paris";
+
+ 
 
   for (const { url, source } of RSS_FEEDS) {
     try {
@@ -42,15 +48,18 @@ async function fetchRSS() {
       data = data.trim();
 
 
+  const chunkEndUTC = fromZonedTime(chunkEndTime, tzone).toISOString();
+  const chunkStartUTC = fromZonedTime(chunkStartTime, tzone).toISOString();
+
       // Parse the cleaned data
       const feed = await parser.parseString(data);
 
-      //console.log(feed);
 
       // Filter out items outside the previous chunk
       const recentItems = feed.items.filter(item => {
-        const pubDate = parseISO(item.isoDate || item.pubDate);
-        return isAfter(pubDate, chunkStartTime) && isBefore(pubDate, chunkEndTime);
+        const pubDate = new Date(item.isoDate || item.pubDate);
+
+        return isAfter(pubDate, chunkStartUTC) && isBefore(pubDate, chunkEndUTC);
       });
 
       // Analyze sentiment for each item and filter out those with negative sentiment
