@@ -5,7 +5,13 @@ import analyseSentiment from './analyseSentiment';
 import shuffleArray from './shuffle';
 import { getPreviousChunkTimes } from '@/utils/chunks'; // Import the new function
 
-const parser = new Parser();
+let parser = new Parser({
+  customFields: {
+    item: [
+      ['media:content', 'media:content', {keepArray: true}],
+    ]
+  }
+})
 
 const RSS_FEEDS = [
   { url: "https://www.theguardian.com/europe/rss", source: "The Guardian" },
@@ -22,7 +28,6 @@ const RSS_FEEDS = [
 ];
 
 
-
 async function fetchRSS() {
   let allItems = [];
   const { chunkStartTime, chunkEndTime } = getPreviousChunkTimes();
@@ -36,8 +41,11 @@ async function fetchRSS() {
       // Clean the data by removing any leading non-whitespace characters
       data = data.trim();
 
+
       // Parse the cleaned data
       const feed = await parser.parseString(data);
+
+      //console.log(feed);
 
       // Filter out items outside the previous chunk
       const recentItems = feed.items.filter(item => {
@@ -51,6 +59,12 @@ async function fetchRSS() {
         item.sentimentScore = score;
         item.sentimentLabel = sentiment;
         item.source = source; // Add source to item
+
+        if (item['media:content'] && item['media:content'].length > 0) {
+          item.imageUrls = item['media:content'].map(media => media['$']?.url).filter(url => url);
+        } else {
+          item.imageUrls = null;
+        }
       });
 
       // Filter out items with a sentiment score below -0.1

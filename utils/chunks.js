@@ -1,7 +1,11 @@
 import { setHours, getHours, setMinutes, setSeconds, startOfDay, addDays } from 'date-fns';
 
+//const now = new Date('2024-07-23T17:00:00'); 
+
+const now = new Date();
+
 export function getPreviousChunkTimes() {
-  const now = new Date();
+
   const hour = getHours(now);
   let chunkStartTime, chunkEndTime;
 
@@ -31,8 +35,7 @@ export function getPreviousChunkTimes() {
 
 
 export function getCurrentChunkEndTime() {
-        const now = new Date();
-       // const now = new Date('2024-07-23T02:00:00'); 
+
         const hour = getHours(now);
         let nextChunk;
       

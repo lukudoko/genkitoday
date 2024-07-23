@@ -6,6 +6,7 @@ const noto = Noto_Sans_JP({
   subsets: ['latin'],
   variable: '--font-noto-jp',
   display: 'swap',
+  adjustFontFallback: false,
 });
 
 const yellowtail = Yellowtail({
