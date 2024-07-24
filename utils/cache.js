@@ -1,4 +1,26 @@
-import { getCurrentChunkEndTime } from '@/utils/chunks'; // Ensure you have this function
+import { setHours, parse, set, getHours, format, formatISO, setMinutes, setSeconds, startOfDay, addDays } from 'date-fns';
+
+const now = new Date();
+
+export function getCurrentChunkEndTime() {
+
+        const hour = getHours(now);
+        let nextChunk;
+      
+        if (hour >= 21 || hour < 9) {
+            nextChunk = setHours(startOfDay(now), 9);
+            nextChunk = addDays(nextChunk, 1);
+            if (hour < 9) {
+              nextChunk = setHours(startOfDay(now), 9);
+            }
+        } else if (hour >= 9 && hour < 15) {
+            nextChunk = setHours(startOfDay(now), 15);//15
+        } else {
+            nextChunk = setHours(startOfDay(now), 21);
+        }
+      
+        return { nextChunk };
+      }
 
 class ClientCache {
   constructor() {
@@ -13,7 +35,9 @@ class ClientCache {
     localStorage.setItem(this.cacheKeyPrefix + key, JSON.stringify(cacheObject));
     
     // Store the next chunk start time
-    const nextChunkStartTime = getCurrentChunkEndTime().nextChunk.getTime(); // Assuming this returns the Date object
+
+    const nextChunkStartTime = getCurrentChunkEndTime().nextChunk.getTime(); 
+	
     localStorage.setItem(this.nextChunkKey, nextChunkStartTime.toString()); // Store as string for simplicity
   }
 

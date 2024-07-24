@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { format } from 'date-fns';
+import { format, getHours, fromUnixTime, formatISO  } from 'date-fns';
 import clientCache from '@/utils/cache'; // Adjusted cache utility
 import Head from 'next/head'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
+
 
 export default function Home() {
   const [news, setNews] = useState([]);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -15,7 +18,7 @@ export default function Home() {
       const cachedNews = clientCache.get(CACHE_KEY);
       if (cachedNews) {
         setNews(cachedNews);
-        return;
+       return;
       }
 
       // Fetch data from API
@@ -48,10 +51,11 @@ export default function Home() {
         <p>No news found</p>
       ) : (
         <div id="post" className="flex items-center justify-center">
+ 
           <div id="stuff" className='flex flex-col items-center justify-center gap-4 prose pt-24'>
             {news.map((item, index) => {
               const pubDate = new Date(item.isoDate || item.pubDate);
-              const formattedDate = format(pubDate, 'yyyy-MM-dd HH:mm:ss');
+              const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
 
                 // Ensure item.imageUrls is an array and not null
                 const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];

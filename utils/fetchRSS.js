@@ -1,10 +1,9 @@
 import Parser from 'rss-parser';
 import axios from 'axios';
-import { isAfter, isBefore, parseISO } from 'date-fns';
+import { setHours, getHours, startOfDay, addDays, isAfter, isBefore } from 'date-fns';
 import analyseSentiment from './analyseSentiment';
 import shuffleArray from './shuffle';
-import { getPreviousChunkTimes } from '@/utils/chunks'; // Import the new function
-import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
+import {  fromZonedTime, toZonedTime } from 'date-fns-tz'
 
 
 
@@ -18,25 +17,55 @@ let parser = new Parser({
 
 const RSS_FEEDS = [
   { url: "https://www.theguardian.com/europe/rss", source: "The Guardian" },
-  { url: "https://www.euronews.com/rss", source: "Euronews"},
   { url: "https://www.irishtimes.com/cmlink/the-irish-times-news-1.1319192", source: "The Irish Times"},
   { url: "http://www.reddit.com/r/ireland/.rss", source: "Reddit - r/Ireland" },
-  { url: "https://www.rte.ie/feeds/rss/?index=/news/&limit=50", source: "RTE"},
+  { url: "http://fetchrss.com/rss/669ff6d792b614031b0a16c4669ff6731d7f84a4bb02f263.atom", source: "RTE"},
   { url: "https://japantimes.co.jp/feed", source: "Japan Times" },
   { url: "https://mainichi.jp/rss/etc/english_latest.rss", source: "The Mainichi Shimbun"},
   { url: "https://www.thejournal.ie/feed/", source: "The Journal" },
-  { url: "https://www.euronews.com/rss", source: "Euronews"},
+  //{ url: "https://www.euronews.com/rss", source: "Euronews"},
   { url: "https://japantoday.com/feed/atom", source: "Japan Today"},
   { url: "https://news.google.com/rss/search?q=+site:www3.nhk.or.jp/nhkworld/&hl=en-US&gl=US&ceid=US:en", source: "NHK World"},
 ];
 
 
+const gnow = new Date();
+const tzone = 'Europe/Stockholm';
+
+export function getPreviousChunkTimes() {
+  const now = toZonedTime(gnow, tzone);
+  const hour = getHours(now);
+
+  
+  let chunkStartTime, chunkEndTime;
+
+  if (hour >= 21 || hour < 9) {
+    chunkEndTime = setHours(startOfDay(now), 21);
+    chunkStartTime = setHours(startOfDay(now), 15);
+    if (hour < 9) {
+      chunkEndTime = addDays(chunkEndTime, -1);
+      chunkStartTime = addDays(chunkStartTime, -1);
+    }
+  } else if (hour >= 9 && hour < 15) {
+    chunkEndTime = setHours(startOfDay(now), 9);
+    chunkStartTime = setHours(startOfDay(now), 21);
+    chunkStartTime = addDays(chunkStartTime, -1);
+  } else {
+    chunkEndTime = setHours(startOfDay(now), 15);
+    chunkStartTime = setHours(startOfDay(now), 9);
+  }
+  
+    chunkEndTime = fromZonedTime(chunkEndTime, tzone).toISOString();
+    chunkStartTime = fromZonedTime(chunkStartTime, tzone).toISOString();
+
+  return { chunkStartTime, chunkEndTime };
+}
+
+
 async function fetchRSS() {
   let allItems = [];
   const { chunkStartTime, chunkEndTime } = getPreviousChunkTimes();
-  const tzone = "Europe/Paris";
 
- 
 
   for (const { url, source } of RSS_FEEDS) {
     try {
@@ -48,9 +77,6 @@ async function fetchRSS() {
       data = data.trim();
 
 
-  const chunkEndUTC = fromZonedTime(chunkEndTime, tzone).toISOString();
-  const chunkStartUTC = fromZonedTime(chunkStartTime, tzone).toISOString();
-
       // Parse the cleaned data
       const feed = await parser.parseString(data);
 
@@ -59,7 +85,7 @@ async function fetchRSS() {
       const recentItems = feed.items.filter(item => {
         const pubDate = new Date(item.isoDate || item.pubDate);
 
-        return isAfter(pubDate, chunkStartUTC) && isBefore(pubDate, chunkEndUTC);
+        return isAfter(pubDate, chunkStartTime) && isBefore(pubDate, chunkEndTime);
       });
 
       // Analyze sentiment for each item and filter out those with negative sentiment
