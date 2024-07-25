@@ -93,7 +93,7 @@ export default function Home() {
           {!loading && news.length > 0 && (
             <div id="footer" className='flex font-yellow text-white items-center justify-center h-32 w-dvw bg-teal-400/70'>
               <div className='text-3xl text-center'>
-                Yay! You're all caught up! (For now...)
+                Yay! Youre all caught up! (For now...)
               </div>
             </div>
           )}
