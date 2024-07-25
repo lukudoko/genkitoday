@@ -1,26 +1,25 @@
-import { setHours, parse, set, getHours, format, formatISO, setMinutes, setSeconds, startOfDay, addDays } from 'date-fns';
+import { setHours, startOfDay, addDays, getHours } from 'date-fns';
 
-const now = new Date();
+// Function to get current chunk end time based on local time
+function getCurrentChunkEndTime() {
+  const now = new Date();
+  const hour = getHours(now);
+  let nextChunk;
 
-export function getCurrentChunkEndTime() {
+  if (hour >= 21 || hour < 9) {
+    nextChunk = setHours(startOfDay(now), 9);
+    nextChunk = addDays(nextChunk, 1);
+    if (hour < 9) {
+      nextChunk = setHours(startOfDay(now), 9);
+    }
+  } else if (hour >= 9 && hour < 15) {
+    nextChunk = setHours(startOfDay(now), 15);
+  } else {
+    nextChunk = setHours(startOfDay(now), 21);
+  }
 
-        const hour = getHours(now);
-        let nextChunk;
-      
-        if (hour >= 21 || hour < 9) {
-            nextChunk = setHours(startOfDay(now), 9);
-            nextChunk = addDays(nextChunk, 1);
-            if (hour < 9) {
-              nextChunk = setHours(startOfDay(now), 9);
-            }
-        } else if (hour >= 9 && hour < 15) {
-            nextChunk = setHours(startOfDay(now), 15);//15
-        } else {
-            nextChunk = setHours(startOfDay(now), 21);
-        }
-      
-        return { nextChunk };
-      }
+  return { nextChunk };
+}
 
 class ClientCache {
   constructor() {
@@ -33,11 +32,9 @@ class ClientCache {
     const expiryTime = now + duration; // Calculate expiry time
     const cacheObject = { value, expiryTime };
     localStorage.setItem(this.cacheKeyPrefix + key, JSON.stringify(cacheObject));
-    
-    // Store the next chunk start time
 
+    // Update the next chunk start time
     const nextChunkStartTime = getCurrentChunkEndTime().nextChunk.getTime(); 
-	
     localStorage.setItem(this.nextChunkKey, nextChunkStartTime.toString()); // Store as string for simplicity
   }
 
