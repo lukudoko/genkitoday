@@ -2,12 +2,38 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import clientCache from '@/utils/cache'; // Adjusted cache utility
 import Head from 'next/head';
-import BounceLoader from "react-spinners/BounceLoader";
+import { motion } from 'framer-motion';
+
 
 export default function Home() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
   const [error, setError] = useState(null); // Added error state
+  const [footerText, setFooterText] = useState('');
+
+  const texts = [
+    "All caught up!",
+    "You\'ve made it! (Didn\'t think you would...)",
+    "Welcome to the bottom of the page!",
+    "You can go away now!",
+    "You\'ve read everything! Have you considered touching grass?",
+    "Now get off your phone.",
+    "All done! No more news till later!"
+  ];
+  
+  function getRandomText() {
+    const randomIndex = Math.floor(Math.random() * texts.length);
+    return texts[randomIndex];
+  }
+
+  useEffect(() => {
+    async function getLoader() {
+      const { squircle } = await import('ldrs')
+      squircle.register()
+    }
+    getLoader()
+  });
+
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +63,8 @@ export default function Home() {
       }
     }
 
+
+    setFooterText(getRandomText()); // Set the random text on component mount
     fetchData();
   }, []);
 
@@ -46,58 +74,57 @@ export default function Home() {
         <title>Genki Today!</title>
         <meta name="theme-color" content="#69decf" />
       </Head>
-      <div className='bg-stone-50 min-h-dvh'>
-        <div className='fixed top-0 flex items-center justify-center w-full h-fit backdrop-blur-md bg-teal-400/70 z-50'>
-          <div className='text-5xl p-4 text-white font-yellow'>Genki Today!</div>
-        </div>
-        <div id="body" className="flex flex-col items-center justify-center">
-          <div id="items" className='flex flex-col min-h-dvh md:flex-row flex-wrap w-11/12 lg:w-4/5 items-center justify-center lg:items-start gap-8 max-w-[150ch] pb-12 pt-24'>
-            {loading && <div className='flex font-yellow justify-center items-center text-teal-400 flex-col'><BounceLoader
-              color="#2DD4BF"
-              loading
-              size={130}
-              speedMultiplier={2}
-            /><p className='text-4xl py-12'>Loading your news...</p>
-            </div>}
-            {error && <p>{error}</p>}
-            {news.length === 0 && !loading && !error && (
-              <p >No news found</p>
-            )}
-            {news.length > 0 && !loading && !error && news.map((item, index) => {
-              const pubDate = new Date(item.isoDate || item.pubDate);
-              const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
+      <div className='fixed top-0 flex items-center justify-center w-full h-fit backdrop-blur-md bg-teal-400/70 z-50'>
+        <div className='text-5xl p-4 text-white font-yellow'>Genki Today!</div>
+      </div>
+      <div id="cont" className="min-h-dvh flex flex-col items-center justify-center">
+        {loading && <motion.div initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          transition={{ duration: 0.5, ease: "easeInOut" }} id="loader" className='absolute flex pt-24 h-dvh w-48 font-sans items-center justify-center font-semibold text-teal-400 flex-col'>
 
-              // Ensure item.imageUrls is an array and not null
-              const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
-              let imageUrl = imageUrls[0]; // Default to the first image
+          <l-squircle size="90" stroke="20" stroke-length="0.15" bg-opacity="0.1" speed="0.9" color="#2DD4BF"  ></l-squircle>
+          <p className='animate-pulse text-center py-16 text-2xl'>Loading your stories...</p>
+        </motion.div>}
+        {error && <p>{error}</p>}
+        {news.length === 0 && !loading && !error && (
+          <p >No news found</p>
+        )}
 
-              // Use the last image for The Guardian if there are multiple images
-              if (item.source === "The Guardian" && imageUrls.length > 1) {
-                imageUrl = imageUrls[imageUrls.length - 1]; // Use the last image
-              }
+        <motion.div id="items" className='columns-1 md:columns-2 md:gap-8 lg:gap-5 w-11/12 transform transition-all duration-500 ease-in-out lg:w-4/5 max-w-[150ch] pb-12 pt-24'>
+          {news.length > 0 && !loading && !error && news.map((item, index) => {
+            const pubDate = new Date(item.isoDate || item.pubDate);
+            const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
 
-              return (
-                <a id="newsitem" className="lg:w-2/5 shadow-[5px_5px_0px_0px_rgba(45,212,191)] border border-teal-400 rounded-xl bg-white no-underline transform transition-transform duration-150 ease-in-out hover:scale-[1.02]" href={item.link} target="_blank" rel="noopener noreferrer" key={index}>
-                  {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
-                  <div id="bod" className='font-sans p-3'>
-                    <div className='font-sans text-left hover:underline text-2xl md:text-4xl font-extrabold'>{item.title}</div>
-                    <div className='text-sm pt-2 font-thin'>{item.source} | {formattedDate}</div>
-                    <hr className="border-t border-neutral-300 my-1" />
-                    <div className="line-clamp-4 text-justify pt-3 font-medium text-sm">{item.contentSnippet}</div>
-                  </div>
-                </a>
+            // Ensure item.imageUrls is an array and not null
+            const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
+            let imageUrl = imageUrls[0]; // Default to the first image
 
-              );
-            })}
-          </div>
-          {!loading && news.length > 0 && (
-            <div id="footer" className='flex font-yellow text-white items-center justify-center h-32 w-dvw bg-teal-400/70'>
-              <div className='text-3xl text-center'>
-                Yay! Youre all caught up! (For now...)
-              </div>
+            // Use the last image for The Guardian if there are multiple images
+            if (item.source === "The Guardian" && imageUrls.length > 1) {
+              imageUrl = imageUrls[imageUrls.length - 1]; // Use the last image
+            }
+
+            return (
+              <motion.a  layout transition={{ duration: 3, ease: "easeInOut" }}  id="newsitem" className="block mb-8 w-full break-inside-avoid shadow-[5px_5px_0px_0px_rgba(45,212,191)] border border-teal-400 rounded-xl bg-white no-underline transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]" href={item.link} target="_blank" rel="noopener noreferrer" key={index}>
+                {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
+                <div id="bod" className='font-sans p-3'>
+                  <div className='font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold'>{item.title}</div>
+                  <div className='text-sm pt-2 font-thin'>{item.source} | {formattedDate}</div>
+                  <hr className="border-t border-neutral-300 my-1" />
+                  <div className="line-clamp-4 text-justify pt-3 font-medium text-sm">{item.contentSnippet}</div>
+                </div>
+              </motion.a>
+
+            );
+          })}
+        </motion.div>
+        {!loading && news.length > 0 && (
+          <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-dvw bg-teal-400/70'>
+            <div className='text-3xl font-bold text-center'>
+            {footerText}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
