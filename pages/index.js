@@ -85,11 +85,7 @@ export default function Home() {
         <>
             <Head>
             <title>Genki Today!</title>
-            <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-            <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-            <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-            <link rel="shortcut icon" href="/icons/favicon.ico" />
-            <meta name="theme-color" content="#69decf" />
+            <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width"></meta>
             </Head>
             <div className='flex fixed left-0 top-0 items-center justify-center w-screen h-20 backdrop-blur-md bg-teal-400/70 z-50'>
                 <div className='text-5xl p-4 text-white font-yellow'>Genki Today!</div>

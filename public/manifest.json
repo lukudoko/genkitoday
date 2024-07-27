@@ -1,0 +1,27 @@
+{
+    "name": "Genki Today!",
+    "short_name": "(Finally) some good news!",
+    "theme_color": "#2DD4BF",
+    "background_color": "#2DD4BF",
+    "display": "standalone",
+    "orientation": "any",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "/icons/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/icons/android-chrome-256x256.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      },
+      {
+        "src": "/icons/android-chrome-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+  }
