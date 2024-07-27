@@ -169,7 +169,7 @@ export default function Home() {
                     animate={{ opacity: 1}}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                    <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer">
+                    <a className="no-underline" href={item.link} rel="noopener noreferrer">
                         {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
                         <div id="bod" className="font-sans p-3">
                             <div className="font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold">{item.title}</div>
