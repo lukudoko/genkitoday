@@ -1,4 +1,4 @@
-import fetchRSS from '@/utils/fetchRSS';
+import fetchRSS from '@/utils/testRSS';
 
 export default async (req, res) => {
   try {
