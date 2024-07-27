@@ -11,6 +11,10 @@ export default function Home() {
     const [error, setError] = useState(null);
     const [footerText, setFooterText] = useState('');
 
+    const oddItems = news.filter((_, index) => index % 2 !== 0);
+    const evenItems = news.filter((_, index) => index % 2 === 0);
+    
+
     const texts = [
         "All caught up!",
         "You've made it! (Didn't think you would...)",
@@ -107,36 +111,83 @@ export default function Home() {
                     )}
 
 
-                    <div id="items" className='columns-1 md:columns-2 md:gap-8 lg:gap-5  transform transition-all duration-500 ease-in-out '>
-                        {news.length > 0 && !loading && !error && news.map((item, index) => {
-                            const pubDate = new Date(item.isoDate || item.pubDate);
-                            const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
+<div className="flex flex-col md:flex-row gap-8">
+    <div className="flex-1">
+        {evenItems.length > 0 && !loading && !error && evenItems.map((item, index) => {
+            const pubDate = new Date(item.isoDate || item.pubDate);
+            const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
 
-                            // Ensure item.imageUrls is an array and not null
-                            const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
-                            let imageUrl = imageUrls[0]; // Default to the first image
+            // Ensure item.imageUrls is an array and not null
+            const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
+            let imageUrl = imageUrls[0]; // Default to the first image
 
-                            // Use the last image for The Guardian if there are multiple images
-                            if (item.source === "The Guardian" && imageUrls.length > 1) {
-                                imageUrl = imageUrls[imageUrls.length - 1]; // Use the last image
-                            }
+            // Use the last image for The Guardian if there are multiple images
+            if (item.source === "The Guardian" && imageUrls.length > 1) {
+                imageUrl = imageUrls[imageUrls.length - 1]; // Use the last image
+            }
 
-                            return (
-                                <motion.div id="newsitem" className='block mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit break-inside-avoid shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]'  key={index} layout transition={{ duration: 3, ease: "easeInOut" }}> 
-                                <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer" key={index}>
-                                    {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
-                                    <div id="bod" className='font-sans p-3'>
-                                        <div className='font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold'>{item.title}</div>
-                                        <div className='text-sm pt-2 font-thin'>{item.source} | {formattedDate}</div>
-                                        <hr className="border-t border-neutral-600 my-1" />
-                                        <div className="line-clamp-4 text-justify pt-3 h-fit font-medium text-sm">{item.contentSnippet}</div>
-                                    </div>
-                                </a>
-                                </motion.div>
-                            );
-                        })}
+            return (
+                <motion.div
+                layout
+                    id="newsitem"
+                    className="mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]"
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1}}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                    <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer">
+                        {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
+                        <div id="bod" className="font-sans p-3">
+                            <div className="font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold">{item.title}</div>
+                            <div className="text-sm pt-2 font-thin">{item.source} | {formattedDate}</div>
+                            <hr className="border-t border-neutral-600 my-1" />
+                            <div className="line-clamp-4 text-justify pt-3 h-fit font-medium text-sm">{item.contentSnippet}</div>
+                        </div>
+                    </a>
+                </motion.div>
+            );
+        })}
+    </div>
+    <div className="flex-1">
+        {oddItems.length > 0 && !loading && !error && oddItems.map((item, index) => {
+            const pubDate = new Date(item.isoDate || item.pubDate);
+            const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
 
-                    </div>
+            // Ensure item.imageUrls is an array and not null
+            const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
+            let imageUrl = imageUrls[0]; // Default to the first image
+
+            // Use the last image for The Guardian if there are multiple images
+            if (item.source === "The Guardian" && imageUrls.length > 1) {
+                imageUrl = imageUrls[imageUrls.length - 1]; // Use the last image
+            }
+
+            return (
+                <motion.div
+                layout
+                    id="newsitem"
+                    className="mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]"
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1}}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                    <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer">
+                        {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
+                        <div id="bod" className="font-sans p-3">
+                            <div className="font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold">{item.title}</div>
+                            <div className="text-sm pt-2 font-thin">{item.source} | {formattedDate}</div>
+                            <hr className="border-t border-neutral-600 my-1" />
+                            <div className="line-clamp-4 text-justify pt-3 h-fit font-medium text-sm">{item.contentSnippet}</div>
+                        </div>
+                    </a>
+                </motion.div>
+            );
+        })}
+    </div>
+</div>
+
                 </div>
                 {!loading && news.length > 0 && (
                     <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-dvw bg-teal-400/70'>

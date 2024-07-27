@@ -1,9 +1,8 @@
+// fetchRSS.js
 import Parser from 'rss-parser';
 import axios from 'axios';
-import { setHours, startOfDay, addDays, getHours, isAfter, isBefore } from 'date-fns';
 import analyseSentiment from './analyseSentiment';
 import shuffleArray from './shuffle';
-import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz';
 
 let parser = new Parser({
   customFields: {
@@ -25,44 +24,8 @@ const RSS_FEEDS = [
   { url: "https://news.google.com/rss/search?q=+site:www3.nhk.or.jp/nhkworld/&hl=en-US&gl=US&ceid=US:en", source: "NHK World" },
 ];
 
-const tzone = 'Europe/Stockholm';
-
-export function getPreviousChunkTimes() {
-  const now = toZonedTime(new Date(), tzone);
-  const hour = getHours(now);
-
-  let chunkStartTime, chunkEndTime;
-
-  if (hour >= 21 || hour < 9) {
-    chunkEndTime = setHours(startOfDay(now), 21);
-    chunkStartTime = setHours(startOfDay(now), 15);
-    if (hour < 9) {
-      chunkEndTime = addDays(chunkEndTime, -1);
-      chunkStartTime = addDays(chunkStartTime, -1);
-    }
-  } else if (hour >= 9 && hour < 15) {
-    chunkEndTime = setHours(startOfDay(now), 9);
-    chunkStartTime = setHours(startOfDay(now), 21);
-    chunkStartTime = addDays(chunkStartTime, -1);
-  } else {
-    chunkEndTime = setHours(startOfDay(now), 15);
-    chunkStartTime = setHours(startOfDay(now), 9);
-  }
-
-  // Convert times to ISO strings for consistency
-  chunkEndTime = fromZonedTime(chunkEndTime, tzone).toISOString();
-  chunkStartTime = fromZonedTime(chunkStartTime, tzone).toISOString();
-
-  return { chunkStartTime, chunkEndTime };
-}
-
 async function fetchRSS() {
   let allItems = [];
-  const { chunkStartTime, chunkEndTime } = getPreviousChunkTimes();
-
-  // Convert ISO strings back to Date objects for comparison
-  const chunkStartDate = new Date(chunkStartTime);
-  const chunkEndDate = new Date(chunkEndTime);
 
   for (const { url, source } of RSS_FEEDS) {
     try {
@@ -76,15 +39,8 @@ async function fetchRSS() {
       // Parse the cleaned data
       const feed = await parser.parseString(data);
 
-      // Filter out items outside the previous chunk
-      const recentItems = feed.items.filter(item => {
-        const pubDate = new Date(item.isoDate || item.pubDate);
-
-        return isAfter(pubDate, chunkStartDate) && isBefore(pubDate, chunkEndDate);
-      });
-
-      // Analyze sentiment for each item and filter out those with negative sentiment
-      recentItems.forEach(item => {
+      // Analyze sentiment for each item and add source
+      feed.items.forEach(item => {
         const { score, sentiment } = analyseSentiment(item.title);
         item.sentimentScore = score;
         item.sentimentLabel = sentiment;
@@ -98,7 +54,7 @@ async function fetchRSS() {
       });
 
       // Filter out items with a sentiment score below -0.1
-      const filteredItems = recentItems.filter(item => item.sentimentScore >= -0.1);
+      const filteredItems = feed.items.filter(item => item.sentimentScore >= -0.1);
 
       allItems = [...allItems, ...filteredItems];
     } catch (error) {

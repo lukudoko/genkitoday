@@ -1,25 +1,4 @@
-import { setHours, startOfDay, addDays, getHours } from 'date-fns';
-
-// Function to get current chunk end time based on local time
-function getCurrentChunkEndTime() {
-  const now = new Date();
-  const hour = getHours(now);
-  let nextChunk;
-
-  if (hour >= 21 || hour < 9) {
-    nextChunk = setHours(startOfDay(now), 9);
-    nextChunk = addDays(nextChunk, 1);
-    if (hour < 9) {
-      nextChunk = setHours(startOfDay(now), 9);
-    }
-  } else if (hour >= 9 && hour < 15) {
-    nextChunk = setHours(startOfDay(now), 15);
-  } else {
-    nextChunk = setHours(startOfDay(now), 21);
-  }
-
-  return { nextChunk };
-}
+import { getCurrentChunkEndTime } from '@/utils/chunks';
 
 class ClientCache {
   constructor() {
