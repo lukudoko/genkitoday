@@ -122,7 +122,7 @@ export default function Home() {
                             }
 
                             return (
-                                <motion.div id="newsitem" className='block mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit break-inside-avoid shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]'  layout transition={{ duration: 3, ease: "easeInOut" }}> 
+                                <motion.div id="newsitem" className='block mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit break-inside-avoid shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-150 ease-in-out active:scale-[1.02] hover:scale-[1.02]'  key={index} layout transition={{ duration: 3, ease: "easeInOut" }}> 
                                 <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer" key={index}>
                                     {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
                                     <div id="bod" className='font-sans p-3'>
