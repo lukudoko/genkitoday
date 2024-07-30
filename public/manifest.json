@@ -9,17 +9,12 @@
     "start_url": "/",
     "icons": [
       {
-        "src": "/icons/android-chrome-192x192.png",
+        "src": "/icons/icon-192x192.png",
         "type": "image/png",
         "sizes": "192x192"
       },
       {
-        "src": "/icons/android-chrome-256x256.png",
-        "type": "image/png",
-        "sizes": "256x256"
-      },
-      {
-        "src": "/icons/android-chrome-512x512.png",
+        "src": "/icons/icon-512x512.png",
         "type": "image/png",
         "sizes": "512x512"
       }
