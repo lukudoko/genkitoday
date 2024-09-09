@@ -10,7 +10,6 @@ module.exports = {
       fontFamily: {
         // 👇 Add CSS variables
         sans: ["var(--font-noto-jp)"],
-        lex: ["var(--lexend)"],
         yellow: ["var(--font-yellowtail)"],
       },
       typography: {
