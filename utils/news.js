@@ -53,6 +53,10 @@ const News = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [footerText, setFooterText] = useState('');
+    const [iframeUrl, setIframeUrl] = useState(null);
+    const [iframeVisible, setIframeVisible] = useState(false);
+
+
     const texts = [
         "All caught up!",
         "You've made it! (Didn't think you would...)",
@@ -118,7 +122,7 @@ const News = () => {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
             <div className="flex flex-col items-center justify-center w-11/12 pt-24 pb-8 lg:w-4/5 max-w-[150ch]">
-                <div className="flex flex-col md:flex-row gap-8">
+                <div className=" w-full flex flex-col md:flex-row gap-8">
                     <div className="flex-1">
                         {evenItems.length > 0 && evenItems.map((item, index) => (
                             <NewsItem item={item} index={index} key={item.id || index} />

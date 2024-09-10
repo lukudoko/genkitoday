@@ -18,7 +18,7 @@ const Loader = () => {
     return (
         <div
             id="loader"
-            className="fixed flex w-dvw h-dvh max-h-dvh bg-teal-400 font-sans items-center justify-center font-semibold text-white flex-col"
+            className="fixed flex w-dvw mt-[80px] h-dvh max-h-dvh bg-teal-400/70 font-sans items-center justify-center font-semibold text-white flex-col"
         >
             <motion.div
                 initial={{ opacity: 0 }}
