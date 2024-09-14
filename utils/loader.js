@@ -24,7 +24,7 @@ const Loader = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
-                className="flex items-center justify-center flex-col"
+                className="-mt-[80px] flex items-center justify-center flex-col"
             >
 
 
