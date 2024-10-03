@@ -3,7 +3,7 @@ import { format, isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
 import clientCache from '@/utils/cache';
 import { getPreviousChunkTimes } from '@/utils/chunks';
-import Loader from '@/utils/loader';
+import Loader from '@/components/loader';
 
 // NewsItem Component
 const NewsItem = ({ item, index }) => {

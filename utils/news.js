@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { format, isAfter, isBefore } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import clientCache from '@/utils/cache';
 import { getPreviousChunkTimes } from '@/utils/chunks';
-import Loader from '@/utils/loader';
+import Loader from '@/components/loader'; 
 
 // NewsItem Component
 const NewsItem = ({ item, index }) => {
@@ -53,9 +53,6 @@ const News = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [footerText, setFooterText] = useState('');
-    const [iframeUrl, setIframeUrl] = useState(null);
-    const [iframeVisible, setIframeVisible] = useState(false);
-
 
     const texts = [
         "All caught up!",
@@ -116,33 +113,48 @@ const News = () => {
         fetchData();
     }, []);
 
-    if (loading) return <Loader />;
-    if (error) return <div>{error}</div>;
+    
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center w-11/12 pt-24 pb-8 lg:w-4/5 max-w-[150ch]">
-                <div className=" w-full flex flex-col md:flex-row gap-8">
-                    <div className="flex-1">
-                        {evenItems.length > 0 && evenItems.map((item, index) => (
-                            <NewsItem item={item} index={index} key={item.id || index} />
-                        ))}
-                    </div>
-                    <div className="flex-1">
-                        {oddItems.length > 0 && oddItems.map((item, index) => (
-                            <NewsItem item={item} index={index} key={item.id || index} />
-                        ))}
-                    </div>
-                </div>
-                
-            </div>
-            {!loading && news.length > 0 && (
-                    <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-full bg-teal-400/70'>
-                        <div className='text-xl font-bold text-center'>
-                            {footerText}
+            <AnimatePresence>
+                {loading && (
+                    <motion.div
+                        key="loader"
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Loader />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {!loading && (
+                <div className="flex flex-col items-center justify-center w-11/12 pt-24 pb-8 lg:w-4/5 max-w-[150ch]">
+                    <div className="w-full flex flex-col md:flex-row gap-8">
+                        <div className="flex-1">
+                            {evenItems.length > 0 && evenItems.map((item, index) => (
+                                <NewsItem item={item} index={index} key={item.id || index} />
+                            ))}
+                        </div>
+                        <div className="flex-1">
+                            {oddItems.length > 0 && oddItems.map((item, index) => (
+                                <NewsItem item={item} index={index} key={item.id || index} />
+                            ))}
                         </div>
                     </div>
-                )}
+                </div>
+            )}
+
+            {!loading && news.length > 0 && (
+                <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-full bg-teal-400/70'>
+                    <div className='text-xl font-bold text-center'>
+                        {footerText}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
