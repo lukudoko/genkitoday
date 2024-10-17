@@ -9,7 +9,7 @@ const Loader = () => {
     visible: {
       pathLength: .28,  // Fully drawn path
       transition: {
-        duration: 1.8,   // Time it takes to fully draw
+        duration: 3,   // Time it takes to fully draw
         ease: "easeInOut",
         repeat: Infinity,  // Loop infinitely
         repeatType: "reverse"  // Reverse animation to undraw

@@ -17,7 +17,7 @@ const NewsItem = ({ item, index }) => {
     return (
         <motion.div
             layout
-            className="mb-8 border border-teal-400 rounded-xl bg-white w-full h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)]"
+            className="mb-8 border border-teal-400 z-0 rounded-xl bg-white w-full h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)]"
             key={index}
             initial={{ opacity: 0, y: 500 }}
             animate={{
@@ -125,6 +125,7 @@ const News = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
+                        className='z-50'
                     >
                         <Loader />
                     </motion.div>
