@@ -22,7 +22,7 @@ const Loader = () => {
   return (
     <div
       id="loader"
-      className="fixed top-0 left-0 flex w-dvw z-50 h-dvh max-h-dvh bg-[#69decf] font-sans items-center justify-center font-semibold text-white flex-col"
+      className="fixed top-0 left-0 flex w-dvw z-50 h-dvh max-h-dvh bg-teal-400 font-sans items-center justify-center font-semibold text-white flex-col"
     >
       <motion.div
         initial={{ opacity: 0 }}

@@ -16,12 +16,14 @@ const RSS_FEEDS = [
   { url: "https://www.theguardian.com/europe/rss", source: "The Guardian" },
   { url: "https://www.irishtimes.com/cmlink/the-irish-times-news-1.1319192", source: "The Irish Times" },
   { url: "http://www.reddit.com/r/ireland/.rss", source: "Reddit - r/Ireland" },
-  { url: "http://fetchrss.com/rss/669ff6d792b614031b0a16c4669ff6731d7f84a4bb02f263.atom", source: "RTE" },
+  { url: "https://www.rte.ie/feeds/rss/?index=/news/&limit=100", source: "RTE" },
   { url: "https://japantimes.co.jp/feed", source: "Japan Times" },
   { url: "https://mainichi.jp/rss/etc/english_latest.rss", source: "The Mainichi Shimbun" },
   { url: "https://www.thejournal.ie/feed/", source: "The Journal" },
   { url: "https://japantoday.com/feed/atom", source: "Japan Today" },
-  { url: "https://news.google.com/rss/search?q=+site:www3.nhk.or.jp/nhkworld/&hl=en-US&gl=US&ceid=US:en", source: "NHK World" },
+  { url: "https://www.lemonde.fr/en/rss/une.xml", source: "Le Monde" },
+  { url: "https://feeds.feedburner.com/euronews/en/home/", source: "Euronews" },
+  { url: "https://rss.diffbot.com/rss?url=https://www3.nhk.or.jp/nhkworld/", source: "NHK World" },
 ];
 
 async function fetchRSS() {

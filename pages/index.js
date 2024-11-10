@@ -12,14 +12,14 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0}}
+                transition={{ duration: 0 }}
             >
                 <Head>
                     <title>Genki Today!</title>
                     <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width"></meta>
                 </Head>
-                <div className='z-30 flex fixed left-0 top-0 items-center justify-center w-screen h-20 backdrop-blur-lg bg-teal-400/70 '>
-                    <div className='text-5xl p-4 text-white font-yellow'>Genki Today!</div>
+                <div className='z-30 flex fixed left-0 top-0 items-center justify-center w-screen h-20 bg-teal-400 '>
+                    <div className='sticky text-5xl p-4 text-white font-yellow'>Genki Today!</div>
                 </div>
                 <News />
             </motion.div>

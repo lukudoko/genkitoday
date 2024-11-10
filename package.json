@@ -11,10 +11,13 @@
   "dependencies": {
     "apos-to-lex-form": "^1.0.5",
     "axios": "^1.7.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
     "framer-motion": "^11.11.9",
     "ldrs": "^1.0.2",
+    "lucide-react": "^0.454.0",
     "natural": "^7.1.0",
     "net": "^1.0.2",
     "next": "^14.2.15",
@@ -23,11 +26,14 @@
     "react-dom": "^18.3.1",
     "rss-parser": "^3.13.0",
     "stopword": "^3.1.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.5",
     "postcss": "^8.4.47",

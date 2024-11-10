@@ -4,48 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'; // Import AnimatePresen
 import clientCache from '@/utils/cache';
 import { getPreviousChunkTimes } from '@/utils/chunks';
 import Loader from '@/components/loader'; 
+import Card from '@/components/card';
 
-// NewsItem Component
-const NewsItem = ({ item, index }) => {
-    const pubDate = new Date(item.isoDate || item.pubDate);
-    const formattedDate = format(pubDate, 'MMMM dd, yyyy h:mm a');
-    const imageUrls = Array.isArray(item.imageUrls) ? item.imageUrls : [];
-    let imageUrl = item.source === "The Guardian" && imageUrls.length > 1
-        ? imageUrls[imageUrls.length - 1]
-        : imageUrls[0];
-
-    return (
-        <motion.div
-            layout
-            className="mb-8 border border-teal-400 z-0 rounded-xl bg-white w-full h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)]"
-            key={index}
-            initial={{ opacity: 0, y: 500 }}
-            animate={{
-                opacity: 1,
-                y: 0,
-                transition: {
-                    type: "spring",
-                    stiffness: 40,
-                    duration: 0.5,
-                    delay: index * 0.1,
-                    ease: "easeInOut"
-                }
-            }}
-            whileHover={{ scale: 1.02, transition: { duration: 0.1 } }}
-            whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-        >
-            <a className="no-underline" href={item.link} target="_blank" rel="noopener noreferrer">
-                {imageUrl && <img src={imageUrl} alt={item.title || "News Image"} className="w-full h-auto rounded-t-xl m-0" />}
-                <div className="font-sans p-3">
-                    <div className="font-sans text-left hover:underline text-2xl lg:text-3xl font-extrabold">{item.title}</div>
-                    <div className="text-sm pt-2 font-thin">{item.source} | {formattedDate}</div>
-                    <hr className="border-t border-neutral-600 my-1" />
-                    <div className="line-clamp-4 text-justify pt-3 h-fit font-medium text-sm">{item.contentSnippet}</div>
-                </div>
-            </a>
-        </motion.div>
-    );
-};
 
 // News Component
 const News = () => {
@@ -92,6 +52,7 @@ const News = () => {
                 const { chunkStartTime, chunkEndTime } = getPreviousChunkTimes();
                 const chunkStartDate = new Date(chunkStartTime);
                 const chunkEndDate = new Date(chunkEndTime);
+                console.log(chunkStartTime)
 
                 const filteredNews = data.news.filter(item => {
                     const pubDate = new Date(item.isoDate || item.pubDate);
@@ -116,7 +77,7 @@ const News = () => {
     
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center">
+        <div className="flex  flex-col items-center justify-center">
             <AnimatePresence>
                 {loading && (
                     <motion.div
@@ -137,12 +98,12 @@ const News = () => {
                     <div className="w-full flex flex-col md:flex-row gap-8">
                         <div className="flex-1">
                             {evenItems.length > 0 && evenItems.map((item, index) => (
-                                <NewsItem item={item} index={index} key={item.id || index} />
+                                <Card item={item} index={index} key={item.id || index} />
                             ))}
                         </div>
                         <div className="flex-1">
                             {oddItems.length > 0 && oddItems.map((item, index) => (
-                                <NewsItem item={item} index={index} key={item.id || index} />
+                                <Card item={item} index={index} key={item.id || index} />
                             ))}
                         </div>
                     </div>
@@ -150,8 +111,8 @@ const News = () => {
             )}
 
             {!loading && news.length > 0 && (
-                <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-full bg-teal-400/70'>
-                    <div className='text-xl font-bold text-center'>
+                <div id="footer" className='flex font-sans text-white items-center justify-center h-32 w-full bg-teal-400'>
+                    <div className='text-xl p-4 font-bold text-center'>
                         {footerText}
                     </div>
                 </div>

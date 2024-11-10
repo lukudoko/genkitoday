@@ -9,7 +9,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="shortcut icon" href="/icons/favicon.ico" />
-        <meta name="theme-color" content="#69decf" />
+        <meta name="theme-color" content="#2DD4BF" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
@@ -45,6 +45,9 @@ export default function Document() {
         <link rel="apple-touch-startup-image" href="ico/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+     
+     
+     
       </Head>
       <body className="bg-stone-50">
         <Main />
