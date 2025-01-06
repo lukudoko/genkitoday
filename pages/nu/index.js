@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import News from "@/components/layout"
+import News from "@/components/news"
 
 const Home = () => {
   const [articles, setArticles] = useState([]);

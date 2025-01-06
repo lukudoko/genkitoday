@@ -25,6 +25,8 @@ const RSS_FEEDS: RSSFeed[] = [
   { url: "https://japantoday.com/feed/atom", source: "Japan Today" },
   { url: "https://www.lemonde.fr/en/rss/une.xml", source: "Le Monde" },
   { url: "https://feeds.feedburner.com/euronews/en/home/", source: "Euronews" },
+  { url: "https://www.scmp.com/rss/5/feed", source: "South China Morning Post" },
+  { url: "https://www.politico.eu/feed/", source: "Politico Europe" },
 ];
 
 interface ExtractedImage {

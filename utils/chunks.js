@@ -1,47 +1,76 @@
-// utils/chunks.js
-import { setHours, startOfDay, addDays, getHours } from 'date-fns';
+import { parseISO, isWithinInterval, setHours, setMinutes, setSeconds, setMilliseconds, addDays, subDays } from 'date-fns';
 
-const now = new Date();
+export const getLastTimeChunk = () => {
+  const now = new Date();
 
-export function getPreviousChunkTimes() {
-  const hour = getHours(now);
+  const hour = now.getHours();
 
-  let chunkStartTime, chunkEndTime;
-
-  if (hour >= 21 || hour < 9) {
-    chunkEndTime = setHours(startOfDay(now), 21);
-    chunkStartTime = setHours(startOfDay(now), 15);
-    if (hour < 9) {
-      chunkEndTime = addDays(chunkEndTime, -1);
-      chunkStartTime = addDays(chunkStartTime, -1);
-    }
-  } else if (hour >= 9 && hour < 15) {
-    chunkEndTime = setHours(startOfDay(now), 9);
-    chunkStartTime = setHours(startOfDay(now), 21);
-    chunkStartTime = addDays(chunkStartTime, -1);
+  if (hour < 9) {
+    return 'night'; 
+  } else if (hour < 15) {
+    return 'morning'; 
+  } else if (hour < 21) {
+    return 'afternoon'; 
   } else {
-    chunkEndTime = setHours(startOfDay(now), 15);
-    chunkStartTime = setHours(startOfDay(now), 9);
+    return 'afternoon'; 
   }
-
-  return { chunkStartTime, chunkEndTime };
 };
 
-export function getCurrentChunkEndTime() {
-    const hour = getHours(now);
-    let nextChunk;
-  
-    if (hour >= 21 || hour < 9) {
-      nextChunk = setHours(startOfDay(now), 9);
-      nextChunk = addDays(nextChunk, 1);
-      if (hour < 9) {
-        nextChunk = setHours(startOfDay(now), 9);
-      }
-    } else if (hour >= 9 && hour < 15) {
-      nextChunk = setHours(startOfDay(now), 15);
-    } else {
-      nextChunk = setHours(startOfDay(now), 21);
-    }
-  
-    return { nextChunk };
-  };
+export const getLastChunkInterval = () => {
+  const now = new Date();
+  const hour = now.getHours();
+
+  let start, end;
+
+  if (hour < 9) {
+
+    start = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 21); 
+    end = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 9); 
+  } else if (hour < 15) {
+
+    start = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 21); 
+    end = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 9); 
+  } else if (hour < 21) {
+
+    start = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 9); 
+    end = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 15); 
+  } else {
+
+    start = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 15); 
+    end = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 21); 
+  }
+
+  return { start, end };
+};
+
+export const filterArticlesByLastChunk = (articles) => {
+  const { start, end } = getLastChunkInterval();
+
+  return articles.filter(article => {
+    const articleTime = parseISO(article.publishedAt); 
+    return isWithinInterval(articleTime, { start, end });
+  });
+};
+
+export const getNextChunkStartTime = () => {
+  const now = new Date();
+  const hour = now.getHours();
+
+  let nextChunkStart;
+
+  if (hour < 9) {
+
+    nextChunkStart = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 9);
+  } else if (hour < 15) {
+
+    nextChunkStart = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 15);
+  } else if (hour < 21) {
+
+    nextChunkStart = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 21);
+  } else {
+
+    nextChunkStart = setHours(setMinutes(setSeconds(setMilliseconds(addDays(now, 1), 0), 0), 0), 9);
+  }
+
+  return nextChunkStart;
+};

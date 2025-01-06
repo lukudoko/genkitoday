@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+
 export default function Document() {
   return (
     <Html lang="en">
@@ -45,9 +46,6 @@ export default function Document() {
         <link rel="apple-touch-startup-image" href="ico/apple-splash-1334-750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
-     
-     
-     
       </Head>
       <body className="bg-stone-50">
         <Main />
