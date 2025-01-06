@@ -1,7 +1,7 @@
 import Parser from 'rss-parser';
-import analyseSentiment from '@/utils/sentiment'; // Assuming you've integrated sentiment analysis
+import analyseSentiment from '@/utils/sentiment';
 
-const parser = new Parser({
+const parser: Parser = new Parser({
   customFields: {
     item: [
       ['media:content', 'media:content', { keepArray: true }],
@@ -9,7 +9,12 @@ const parser = new Parser({
   },
 });
 
-const RSS_FEEDS = [
+interface RSSFeed {
+  url: string;
+  source: string;
+}
+
+const RSS_FEEDS: RSSFeed[] = [
   { url: "https://www.theguardian.com/europe/rss", source: "The Guardian" },
   { url: "https://www.irishtimes.com/cmlink/the-irish-times-news-1.1319192", source: "The Irish Times" },
   { url: "http://www.reddit.com/r/ireland/.rss", source: "Reddit - r/Ireland" },
@@ -22,63 +27,69 @@ const RSS_FEEDS = [
   { url: "https://feeds.feedburner.com/euronews/en/home/", source: "Euronews" },
 ];
 
-const extractImages = (item) => {
+interface ExtractedImage {
+  url: string;
+}
+
+const extractImages = (item: any): string[] => {
   if (item['media:content'] && item['media:content'].length > 0) {
-    // If there's more than one image, take the last one (usually the largest)
     if (item['media:content'].length > 1) {
-      return [item['media:content'][item['media:content'].length - 1]['$']?.url].filter(url => url);
+      return [item['media:content'][item['media:content'].length - 1]['$']?.url].filter((url: string | undefined) => url !== undefined);
     }
-    // If only one image is present, return it
-    return [item['media:content'][0]['$']?.url].filter(url => url);
+    return [item['media:content'][0]['$']?.url].filter((url: string | undefined) => url !== undefined);
   }
   return [];
 };
 
-// Helper function to normalize dates
-const normalizeDate = (dateString) => {
+const normalizeDate = (dateString: string): string | null => {
   try {
-    const date = new Date(dateString);
+    const date: Date = new Date(dateString);
     if (!isNaN(date.getTime())) {
-      return date.toISOString(); // Normalize to ISO 8601 format
+      return date.toISOString();
     }
   } catch (error) {
     console.error(`Failed to parse date: ${dateString}`, error);
   }
-  return null; // Return null if parsing fails
+  return null;
 };
 
-export default async function handler(req, res) {
-  try {
-    let allArticles = [];
+// Updated Article interface with contentSnippet
+interface Article {
+  title: string;
+  link: string;
+  publishedAt: string | null;
+  source: string;
+  imageUrls: string[];
+  sentimentAnalysis: { score: number; label: string };
+  contentSnippet: string; // New property for content snippet
+}
 
-    // Fetch and parse articles from each feed concurrently
-    const feedPromises = RSS_FEEDS.map(async ({ url, source }) => {
+export default async function handler(req: any, res: any): Promise<void> {
+  try {
+    let allArticles: Article[] = [];
+
+    const feedPromises = RSS_FEEDS.map(async ({ url, source }: RSSFeed) => {
       try {
-        const parsedFeed = await parser.parseURL(url);
-        // Add source and extract images for each item
-        return parsedFeed.items.map(item => ({
+        const parsedFeed: any = await parser.parseURL(url);
+        return parsedFeed.items.map((item: any) => ({
           title: item.title,
           link: item.link,
-          publishedAt: normalizeDate(item.pubDate), // Normalize date
-          source, // Add source information
-          imageUrls: extractImages(item), // Add extracted image URLs
-          sentimentAnalysis: analyseSentiment(item.title), // Get sentiment score and label
+          publishedAt: normalizeDate(item.pubDate),
+          source,
+          imageUrls: extractImages(item),
+          sentimentAnalysis: analyseSentiment(item.title),
+          contentSnippet: item.contentSnippet || item.description || '', // Add contentSnippet here
         }));
       } catch (error) {
         console.error(`Failed to fetch or parse feed: ${url}`, error);
-        return []; // Return empty array on failure
+        return [];
       }
     });
 
-    // Resolve all feed promises
-    const allFeeds = await Promise.all(feedPromises);
-
-    // Flatten the results into a single array
+    const allFeeds: Article[][] = await Promise.all(feedPromises);
     allArticles = allFeeds.flat();
 
-    // Filter out articles with invalid dates or negative sentiment
-    const validArticles = allArticles
-      .filter(article => article.publishedAt && article.sentimentAnalysis.score >= -0.1); 
+    const validArticles = allArticles.filter(article => article.publishedAt && article.sentimentAnalysis.score >= -0.1);
 
     res.status(200).json({
       success: true,

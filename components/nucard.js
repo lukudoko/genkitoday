@@ -1,24 +1,49 @@
-
- import { format } from 'date-fns';
-
+import { format } from 'date-fns';
+import Image from 'next/image'
 
 const Card = ({ article }) => {
 
-    const formattedDate = format(article.publishedAt, 'MMMM dd, yyyy h:mm a');
-    return (
-      <div className="border rounded-lg p-4 shadow-lg bg-white">
+  const formattedDate = format(article.publishedAt, 'MMMM dd, yyyy h:mm a');
+  return (
+    <div className="border font-sans overflow-hidden border-teal-400 z-0 rounded-3xl bg-white h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-200 ease-in-out group hover:scale-[1.02]">
+      <a href={article.link} target="_blank" rel="noopener noreferrer" className="block group">
+        
+        {/* Image Section */}
         {article.imageUrls.length > 0 && (
-          <img src={article.imageUrls[0]} alt={article.title} className="w-full h-48 object-cover rounded-t-lg" />
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
+            <Image
+              src={article.imageUrls[0]}
+              alt={article.title || "News Image"}
+              placeholder="blur"
+              quality={100}
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPUvbK/HgAFNwJBbElZhQAAAABJRU5ErkJggg=="
+              fill={true}
+              sizes="100vw"
+              className="rounded-b-3xl object-cover"
+            />
+          </div>
         )}
-        <h3 className="mt-4 text-xl font-semibold">{article.title}</h3>
-        <p className="text-gray-500">{article.source}</p>
-        <p className="text-sm text-gray-700">{formattedDate}</p>
-        <a href={article.link} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:underline mt-2 inline-block">
-          Read More
-        </a>
-      </div>
-    );
-  };
-  
-  export default Card;
-  
+
+        {/* Card Content */}
+        <div className="font-sans p-4">
+          {/* Title - Apply underline on hover using group-hover */}
+          <div className="font-sans text-pretty text-left text-2xl lg:text-3xl font-extrabold group-hover:underline">
+            {article.title}
+          </div>
+          <div className="text-xs pt-2 font-thin">
+            {article.source} | {formattedDate}
+          </div>
+
+          <hr className="border-t border-neutral-600 my-1" />
+
+          <div className="line-clamp-4 text-justify pt-3 h-fit font-medium text-sm">
+            {article.contentSnippet}
+          </div>
+        </div>
+
+      </a>
+    </div>
+  );
+};
+
+export default Card;

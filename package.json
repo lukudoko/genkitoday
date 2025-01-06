@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/node": "^22.10.5",
     "apos-to-lex-form": "^1.0.5",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
@@ -29,11 +30,13 @@
     "stopword": "^3.1.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.7.2",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/react": "^19.0.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.5",

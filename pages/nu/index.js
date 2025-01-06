@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
-import News from "@/utils/layout"
+import News from "@/components/layout"
 
 // Helper function for shuffling
 const shuffleArray = (arr) => {
