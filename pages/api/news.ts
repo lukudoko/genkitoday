@@ -53,7 +53,6 @@ const normalizeDate = (dateString: string): string | null => {
   return null;
 };
 
-// Updated Article interface with contentSnippet
 interface Article {
   title: string;
   link: string;
@@ -61,10 +60,21 @@ interface Article {
   source: string;
   imageUrls: string[];
   sentimentAnalysis: { score: number; label: string };
-  contentSnippet: string; // New property for content snippet
+  contentSnippet: string;
 }
 
 export default async function handler(req: any, res: any): Promise<void> {
+  // Get the API key from the request header
+  const clientApiKey = req.headers['x-api-key'];
+
+  // Get the API key stored in the .env file
+  const storedApiKey = process.env.API_KEY;
+
+  // If the API key doesn't match, respond with a 403 Forbidden error
+  if (clientApiKey !== storedApiKey) {
+    return res.status(403).json({ message: 'Forbidden: Invalid API Key' });
+  }
+
   try {
     let allArticles: Article[] = [];
 
@@ -78,7 +88,7 @@ export default async function handler(req: any, res: any): Promise<void> {
           source,
           imageUrls: extractImages(item),
           sentimentAnalysis: analyseSentiment(item.title),
-          contentSnippet: item.contentSnippet || item.description || '', // Add contentSnippet here
+          contentSnippet: item.contentSnippet || item.description || '', 
         }));
       } catch (error) {
         console.error(`Failed to fetch or parse feed: ${url}`, error);

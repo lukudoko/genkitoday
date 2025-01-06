@@ -5,11 +5,9 @@ const Card = ({ article }) => {
 
   const formattedDate = format(article.publishedAt, 'MMMM dd, yyyy h:mm a');
   return (
-    <div className="border font-sans overflow-hidden border-teal-400 z-0 rounded-3xl bg-white h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-200 ease-in-out group hover:scale-[1.02]">
+    <div className="border font-sans overflow-hidden border-teal-400 z-0 rounded-3xl bg-white h-fit shadow-[5px_5px_0px_0px_rgba(45,212,191)] transform transition-transform duration-200 ease-in-out group hover:scale-[1.03]">
       <a href={article.link} target="_blank" rel="noopener noreferrer" className="block group">
-        
-        {/* Image Section */}
-        {article.imageUrls.length > 0 && (
+          {article.imageUrls.length > 0 && (
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
             <Image
               src={article.imageUrls[0]}
