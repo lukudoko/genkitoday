@@ -31,8 +31,8 @@ const Home = () => {
     <>
       <Head>
         <title>Genki Today!</title>
-        <meta name="viewport" content="initial-scale=1, viewport-fit=cover, width=device-width"></meta>
-      </Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+      </Head>  
       <header className="z-30 flex fixed left-0 top-0 items-center justify-center w-screen h-20 bg-teal-400">
         <div className="text-5xl p-4 text-white font-yellow">
           Genki Today!
