@@ -24,7 +24,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-full h-full p-6 flex items-center justify-center">
+    <div className="w-full h-full p-6 font-noto flex items-center justify-center">
       <p className="text-gray-500">Access denied. Please log in.</p>
     </div>
   );

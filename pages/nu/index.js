@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSettings } from '@/contexts/settingsContext';
 import { useLoading } from '@/contexts/LoadingContext';
 import Head from 'next/head';
-import News from "@/components/nunews"
+import News from "@/components/news"
 import { HiBars3 } from "react-icons/hi2";
 import Sidebar from "@/components/side"
 import { Drawer, DrawerContent, Button, useDisclosure } from "@heroui/react";

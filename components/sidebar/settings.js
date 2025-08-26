@@ -60,7 +60,7 @@ FeedList.displayName = 'FeedList';
   }, [sentimentThreshold, isLoading]);
 
   return (
-    <div>
+    <div className='font-noto '>
       <p className="text-xl pb-2 font-semibold">News Filter</p>
       <motion.div
         initial={false}
@@ -669,7 +669,7 @@ export default function Settings({ userId }) {
   };
 
   return (
-    <div className="flex flex-col w-full px-2 gap-8">
+    <div className="flex flex-col font-noto w-full px-2 gap-8">
       {message && (
         <div className='flex justify-center'>
           <Chip

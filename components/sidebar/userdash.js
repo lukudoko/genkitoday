@@ -8,7 +8,7 @@ const UserDashboard = memo(function UserDashboard({ session }) {
     const displayName = session?.user?.name?.replace(/\s*\([^)]*\)$/, '').trim();
 
     return (
-        <div className="flex flex-col py-8 px-4 max-h-screen w-full">
+        <div className="flex flex-col font-noto py-8 px-4 max-h-screen w-full">
             <UserInfo
                 user={session.user}
                 displayName={displayName}
