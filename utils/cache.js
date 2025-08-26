@@ -1,32 +1,42 @@
 import { getNextChunkStartTime } from '@/utils/chunks';
 
-// Function to set cache with dynamic expiry
 export const setCache = (chunk, data) => {
   const nextChunkStart = getNextChunkStartTime();
-  const cacheExpiryTime = nextChunkStart.getTime(); // Expiry time set to the start of the next chunk
-console.log(nextChunkStart);
+  const cacheExpiryTime = nextChunkStart.getTime();
+
   const cacheData = {
     articles: data,
     expiry: cacheExpiryTime,
+    chunk: chunk,
   };
-  
-  localStorage.setItem(`newsitems`, JSON.stringify(cacheData));
+
+  localStorage.setItem(`newsitems_${chunk}`, JSON.stringify(cacheData));
 };
 
-// Function to get cache data
 export const getCache = (chunk) => {
-  const cacheData = localStorage.getItem(`newsitems`);
+  const cacheData = localStorage.getItem(`newsitems_${chunk}`);
   if (cacheData) {
     return JSON.parse(cacheData);
   }
   return null;
 };
 
-// Function to check if the cache is expired
 export const isCacheExpired = (chunk) => {
   const cacheData = getCache(chunk);
   if (cacheData && cacheData.expiry) {
-    return Date.now() > cacheData.expiry; // Return true if the cache has expired
+    return Date.now() > cacheData.expiry;
   }
-  return true; // If no cache data, consider it expired
+  return true;
+};
+
+export const clearAllCache = () => {
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('newsitems_')) {
+      localStorage.removeItem(key);
+    }
+  });
+};
+
+export const clearChunkCache = (chunk) => {
+  localStorage.removeItem(`newsitems_${chunk}`);
 };

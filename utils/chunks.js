@@ -2,7 +2,6 @@ import { parseISO, isWithinInterval, setHours, setMinutes, setSeconds, setMillis
 
 export const getLastTimeChunk = () => {
   const now = new Date();
-
   const hour = now.getHours();
 
   if (hour < 9) {
@@ -12,7 +11,7 @@ export const getLastTimeChunk = () => {
   } else if (hour < 21) {
     return 'afternoon'; 
   } else {
-    return 'afternoon'; 
+    return 'night'; 
   }
 };
 
@@ -24,8 +23,8 @@ export const getLastChunkInterval = () => {
 
   if (hour < 9) {
 
-    start = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 21); 
-    end = setHours(setMinutes(setSeconds(setMilliseconds(now, 0), 0), 0), 9); 
+    start = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 15); 
+    end = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 21); 
   } else if (hour < 15) {
 
     start = setHours(setMinutes(setSeconds(setMilliseconds(subDays(now, 1), 0), 0), 0), 21); 

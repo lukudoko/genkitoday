@@ -1,0 +1,40 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Simplified User model - no Auth.js adapter required
+// Uses hashed user ID from OAuth provider
+model User {
+  id                String    @id // This will be your hashed user ID
+  sentimentScore    Float     @default(0.5) // Default neutral sentiment (0.0 = negative, 1.0 = positive)
+  
+  // Relations
+  rssFeeds          RssFeed[]
+  
+  // Tracking
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+// RssFeed model - linked to simplified User
+model RssFeed {
+  id        String    @id @default(cuid())
+  url       String
+  title     String?
+  userId    String    // Foreign key to hashed user ID
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Ensure URL is unique per user
+  @@unique([url, userId])
+
+  // Tracking
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
