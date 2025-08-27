@@ -12,6 +12,7 @@ export default function Document() {
         <link rel="shortcut icon" href="/icons/favicon.ico" />
         <meta name="theme-color" content="#2DD4BF" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"  />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-2732-2048.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         <link rel="apple-touch-startup-image" href="ico/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />

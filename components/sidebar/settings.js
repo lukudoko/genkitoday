@@ -27,9 +27,9 @@ const SentimentFilter = React.memo(({
 
   const currentDesc = useMemo(() => {
     SentimentFilter.displayName = 'SentimentFilter';
-AddFeedForm.displayName = 'AddFeedForm';
-FeedItem.displayName = 'FeedItem';
-FeedList.displayName = 'FeedList';
+    AddFeedForm.displayName = 'AddFeedForm';
+    FeedItem.displayName = 'FeedItem';
+    FeedList.displayName = 'FeedList';
     if (isLoading || sentimentThreshold === null) return null;
 
     if (sentimentThreshold <= -0.75) return {
@@ -400,7 +400,7 @@ export default function Settings({ userId }) {
           throw new Error(errorData.message || 'Failed to save sentiment preference');
         }
 
-       // console.log('Sentiment threshold saved successfully:', threshold);
+        // console.log('Sentiment threshold saved successfully:', threshold);
         markSettingsChanged();
       } catch (error) {
         console.error('Error saving sentiment threshold:', error);
